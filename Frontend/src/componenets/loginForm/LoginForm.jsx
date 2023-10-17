@@ -1,8 +1,17 @@
 import React from 'react';
 import { Container, Button } from 'react-bootstrap';
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase/firebaseConfig";
 import "./loginForm.css"
 
+
 function LoginForm() {
+
+  const handleGoogle = async (e)=> {
+    const provider = await new GoogleAuthProvider();
+    return signInWithPopup(auth,provider)
+  }
+
   return (
     <div>
       <Container fluid className='p-2' style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "90vh", flexDirection: "column", marginTop:"10rem" }}>
@@ -13,7 +22,7 @@ function LoginForm() {
         </div>
 
         <div className='' style={{ display: "flex" }}>
-          <button className='btnClass'><img src="/gLogo.png" alt="" style={{ width: "25px" }} />Sign in with Google</button>
+          <button onClick={handleGoogle} className='btnClass'><img src="/gLogo.png" alt="" style={{ width: "25px" }} />Sign in with Google</button>
           <button onClick={() => {console.log('AM')}} className='btnClass'><img src="/apLogo.png" alt="" style={{ width: "18px", marginRight: "5px" }} />Sign in with Apple</button>
         </div>
         <div className='formHolder p-3'>
