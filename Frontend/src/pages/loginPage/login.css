@@ -1,0 +1,44 @@
+
+.brandName{
+  color: #FFF;
+  font-size: 72px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin: auto;
+}
+
+.footerIconsHolder{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 15rem;
+}
+
+.footerIconsHolder Button{
+  margin: 10px;
+}
+
+.rightSection{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 90vh;
+  width: 100%;
+}
+
+.secondFoot {
+  position: relative;
+  background-color: #007bff;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.secondFoot Button {
+  margin: 10px;
+}
