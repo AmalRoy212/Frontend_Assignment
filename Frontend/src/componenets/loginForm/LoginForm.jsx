@@ -1,16 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Container, Button } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../firebase/firebaseConfig";
-import "./loginForm.css"
+import { auth, firestore } from "../../firebase/firebaseConfig";
+import { FirebaseContext } from '../../store/Context';
+import "./loginForm.css";
 
 
 function LoginForm() {
+
+  const navigate = useNavigate();
+  const { app } = useContext(FirebaseContext);
 
   const handleGoogle = async (e)=> {
     const provider = await new GoogleAuthProvider();
     return signInWithPopup(auth,provider)
   }
+
+  const handleSignIn = async (data) => {
+    try {
+      const userRef = await addDoc(collection(firestore, "users"), {
+        name: data.user.displayName
+      });
+      console.log("Document written with ID: ", userRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
 
   return (
     <div>
@@ -22,8 +38,12 @@ function LoginForm() {
         </div>
 
         <div className='' style={{ display: "flex" }}>
-          <button onClick={handleGoogle} className='btnClass'><img src="/gLogo.png" alt="" style={{ width: "25px" }} />Sign in with Google</button>
-          <button onClick={() => {console.log('AM')}} className='btnClass'><img src="/apLogo.png" alt="" style={{ width: "18px", marginRight: "5px" }} />Sign in with Apple</button>
+          <button onClick={(e) => {
+              handleGoogle(e).then((data)=>{
+                handleSignIn(data)
+            })}
+          } className='btnClass'><img src="/gLogo.png" alt="" style={{ width: "25px" }} />Sign in with Google</button>
+          <button onClick={null} className='btnClass'><img src="/apLogo.png" alt="" style={{ width: "18px", marginRight: "5px" }} />Sign in with Apple</button>
         </div>
         <div className='formHolder p-3'>
           <br />
