@@ -1,36 +1,67 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth, firestore } from "../../firebase/firebaseConfig";
+import { auth } from "../../firebase/firebaseConfig";
 import { FirebaseContext } from '../../store/Context';
+import { AuthContext } from '../../store/AuthContext';
+import { toast } from "react-toastify";
 import "./loginForm.css";
 
 
 function LoginForm() {
 
-  const navigate = useNavigate();
-  const { app } = useContext(FirebaseContext);
+  const [userID, setUserID] = useState(null);
 
-  const handleGoogle = async (e)=> {
+  const navigate = useNavigate();
+  const { firebase } = useContext(FirebaseContext);
+  const { user, setUser } = useContext(AuthContext)
+
+  const handleGoogle = async (e) => {
     const provider = await new GoogleAuthProvider();
-    return signInWithPopup(auth,provider)
+    return signInWithPopup(auth, provider)
   }
 
-  const handleSignIn = async (data) => {
-    try {
-      const userRef = await addDoc(collection(firestore, "users"), {
-        name: data.user.displayName
+  useEffect(() => {
+    localStorage.setItem("user", userID);
+  },[userID])
+
+  const handleSignIn = (data) => {
+
+    firebase.firestore().collection("users").where("email", "==", data.user.email).get()
+      .then((querySnapshot) => {
+        if (querySnapshot.docs.length === 0){
+          firebase.firestore().collection("users").add({
+            name: data.user.displayName,
+            email: data.user.email,
+            photoUrl: data.user.photoURL
+          }).then(() => {
+            navigate("/home")
+          }).catch(() => {
+            toast.error("There is an issue with the login");
+          })
+        }else{
+          querySnapshot.forEach((doc) => {
+            setUser(doc.data());
+            setUserID(doc.id)
+            // console.log(doc.id, " => ", doc.data());
+          });
+          navigate('/home')
+        }
+      })
+      .catch((error) => {
+        toast.error("Error getting documents: ", error);
       });
-      console.log("Document written with ID: ", userRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
+
+    // cheking for the user already haing an account or not 
+    if(user === null){
+      
     }
   };
 
   return (
     <div>
-      <Container fluid className='p-2' style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "90vh", flexDirection: "column", marginTop:"10rem" }}>
+      <Container fluid className='p-2' style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "90vh", flexDirection: "column", marginTop: "10rem" }}>
         {/* <div className='d-block d-md-none'> */}
         <div style={{}}>
           <h4 className='text-dark rightHeader'>Sign In</h4>
@@ -39,9 +70,10 @@ function LoginForm() {
 
         <div className='' style={{ display: "flex" }}>
           <button onClick={(e) => {
-              handleGoogle(e).then((data)=>{
-                handleSignIn(data)
-            })}
+            handleGoogle(e).then((data) => {
+              handleSignIn(data)
+            })
+          }
           } className='btnClass'><img src="/gLogo.png" alt="" style={{ width: "25px" }} />Sign in with Google</button>
           <button onClick={null} className='btnClass'><img src="/apLogo.png" alt="" style={{ width: "18px", marginRight: "5px" }} />Sign in with Apple</button>
         </div>
