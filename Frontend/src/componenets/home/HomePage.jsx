@@ -1,17 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { FaSistrix } from 'react-icons/fa';
 import Badge from 'react-bootstrap/Badge';
+import { Doughnut } from 'react-chartjs-2';
 import { AuthContext } from "../../store/AuthContext";
 import '../../pages/loginPage/login.css'
 import './sidebar.css'
 import { FirebaseContext } from '../../store/Context';
+import Chart from '../chart/Chart';
 
 function HomeContainer() {
 
   const { user, setUser } = useContext(AuthContext);
   const { firebase } = useContext(FirebaseContext);
-
 
   useEffect(() => {
     firebase.firestore().collection("users").where("email", "==", localStorage.getItem('user')).get()
@@ -24,6 +25,38 @@ function HomeContainer() {
         toast.error("Error getting documents: ", error);
       });
   }, [user])
+
+
+  //dummy data
+  const labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [19, 12, 20, 23],
+        backgroundColor: '#98D89E',
+      },
+      {
+        label: 'Dataset 2',
+        data: [9, 21, 30, 35],
+        backgroundColor: '#EE8484',
+      },
+    ],
+  };
+  const dataTwo = {
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: [ 12, 40, 23],
+        backgroundColor: [
+          '#98D89E', // Color for the first segment
+          '#EE8484', // Color for the second segment
+          '#FFFF99', // Color for the third segment
+        ],
+      },
+    ],
+  };
   return (
     <>
       <div>
@@ -65,39 +98,104 @@ function HomeContainer() {
             </Col>
             <Col md={9}>
               <div style={{width:"100%", height:"95vh", marginTop:"1rem"}}>
-                <div style={{width:"100%", height:"100px", paddingTop:"1rem",justifyContent:"space-between", display:"flex"}}>
-                  <h4 style={{marginTop:"8px"}} className='text-dark'>Dashboard</h4>
+                <div style={{width:"97%", height:"50px", paddingTop:"1rem",justifyContent:"space-between", display:"flex"}}>
+                  <h4 style={{fontSize:"18px"}} className='text-dark'>Dashboard</h4>
                   <div style={{display:"flex", justifyContent:"center", alignItems:"center", height:"50%"}}>
-                    <div style={{ border: "none", borderRadius: "10px", backgroundColor:"white", width:"180PX", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"5px" }}>Search... <FaSistrix/></div>
+                    <div style={{ border: "none", borderRadius: "10px", backgroundColor:"white", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"5px" }}>
+                     <input style={{border:"none"}} type="text" placeholder='Search...' />
+                     <FaSistrix/>
+                    </div>
                     <Button style={{ border: "none", background: "none" }}><img style={{width:"25px"}} src='/buttonImgs/img6.png' /></Button>
                     {user && <img style={{width:"30px", height:"30px", objectFit:"cover", borderRadius:"50%"}} src={user?.photoUrl} alt="" />}
                   </div>
                 </div>
                 <div style={{width:"100%", padding:"1rem"}}>
                   <Row style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                    <Col md={2} sm={4} xs={11} style={{ borderRadius: "10px", height: "100px", backgroundColor: "white", margin: "1rem", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding:"5px", minWidth:"200px" }}>
+                    <Col md={2} sm={4} xs={11} style={{ borderRadius: "10px", height: "100px", backgroundColor: "white", margin: ".5rem", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding:"5px", minWidth:"200px" }}>
                       <img src="/buttonImgs/img7.png" style={{width:"45px"}} alt="" />
                       <p style={{fontSize:"12px", margin: 0, marginLeft:"7px"}}>Total Revenues</p>
-                      <h5 style={{ marginLeft: "7px", marginBottom:"1rem" }}>$2,129,430 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+2.5</Badge></h5>
+                      <h5 style={{ marginLeft: "7px", marginBottom:"1rem" }}>$2,129,430 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+2.5%</Badge></h5>
 
                     </Col>
                     <Col md={2} sm={4} xs={11} style={{ borderRadius: "10px", height: "100px", backgroundColor: "white", margin: "1rem", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", minWidth:"200px" }}>
                       <img src="/buttonImgs/img8.png" style={{width:"45px"}} alt="" />
                       <p style={{ fontSize: "12px", margin: 0, marginLeft:"7px" }}>Total Transactions</p>
-                      <h5 style={{ marginLeft: "7px" }}>1520 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+2.5</Badge></h5>
+                      <h5 style={{ marginLeft: "7px" }}>1520 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+1.7%</Badge></h5>
                     </Col>
                     <Col md={2} sm={4} xs={11} style={{ borderRadius: "10px", height: "100px", backgroundColor: "white", margin: "1rem", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", minWidth:"200px" }}>
                       <img src="/buttonImgs/img9.png" style={{width:"45px"}} alt="" />
                       <p style={{ fontSize: "12px", margin: 0, marginLeft:"7px" }}>Total Revenues</p>
-                      <h5 style={{ marginLeft: "7px" }}>$2000 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+2.5</Badge></h5>
+                      <h5 style={{ marginLeft: "7px" }}>9721 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+1.4%</Badge></h5>
                     </Col>
                     <Col md={2} sm={4} xs={11} style={{ borderRadius: "10px", height: "100px", backgroundColor: "white", margin: "1rem", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", minWidth:"200px" }}>
                       <img src="/buttonImgs/img10.png" style={{width:"40px"}} alt="" />
                       <p style={{ fontSize: "12px", margin: 0, marginLeft:"7px" }}>Total Revenues</p>
-                      <h5 style={{ marginLeft: "7px" }}>$2000 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+2.5</Badge></h5>
+                      <h5 style={{ marginLeft: "7px" }}>9721 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+4.2%</Badge></h5>
                     </Col>
                   </Row>
-
+                  <Row>
+                    <Col>
+                      <div style={{ width: "100%", height: "40vh", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", borderRadius:"10px"}}>
+                        <div style={{padding:"1rem",width:"100%"}}>
+                          <h6 style={{marginLeft:".5rem"}}>Activities</h6>
+                          <p style={{ padding: 0, margin: ".5rem", fontSize: "12px", color: "#858585" }}>October - November 2023</p>
+                        </div>
+                        <div style={{ width: "100%", height: "25vh", display:"flex", justifyContent:"center"}}>
+                          <Chart chartData={data} />
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row className='d-none d-md-block'>
+                    <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
+                      <Col md={6} sm={9} xs={9} style={{ minHeight: "215px", backgroundColor: "white", width: "47%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex" }}>
+                        <div style={{ height: "70%", width: "50%" }}>
+                          <h6 style={{ padding: 0, margin: ".5rem" }}>Top Products</h6>
+                          <Doughnut data={dataTwo} />
+                        </div>
+                        <div style={{ height: "70%", width: "50%" }}>
+                          <p style={{ padding: 0, margin: ".5rem", fontSize: "12px", color: "#858585" }}>October - November 2023</p>
+                          {/* <br /> */}
+                          <h6 style={{ display: "flex" }}><Badge className='text-success bg-success' style={{ borderRadius: "50%", marginRight: ".5rem" }}>.</Badge>Basic Tees</h6>
+                          <p style={{ padding: 0, fontSize: "12px", color: "#858585", paddingLeft: "1.8rem" }}>55%</p>
+                          <h6 style={{ display: "flex" }}><Badge className='text-warning bg-warning' style={{ borderRadius: "50%", marginRight: ".5rem" }}>.</Badge>Custom Short</h6>
+                          <p style={{ padding: 0, fontSize: "12px", color: "#858585", paddingLeft: "1.8rem" }}>31%</p>
+                          <h6 style={{ display: "flex" }}><Badge className='text-danger bg-danger' style={{ borderRadius: "50%", marginRight: ".5rem" }}>.</Badge>Super Hoodies</h6>
+                          <p style={{ padding: 0, fontSize: "12px", color: "#858585", paddingLeft: "1.8rem" }}>14%</p>
+                        </div>
+                      </Col>
+                      <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "47%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                        <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" /></Button>
+                        <br />
+                        <p>Add Profile</p>
+                      </Col>
+                    </div>
+                  </Row>
+                  <Row className='d-block d-md-none'>
+                    <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
+                      <Col md={6} sm={9} xs={9} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex" }}>
+                        <div style={{ height: "70%", width: "50%" }}>
+                          <h6 style={{ padding: 0, margin: ".5rem" }}>Top Products</h6>
+                          <Doughnut data={dataTwo} />
+                        </div>
+                        <div style={{ height: "70%", width: "50%" }}>
+                          <p style={{ padding: 0, margin: ".5rem", fontSize: "12px", color: "#858585" }}>October - November 2023</p>
+                          {/* <br /> */}
+                          <h6 style={{ display: "flex" }}><Badge className='text-success bg-success' style={{ borderRadius: "50%", marginRight: ".5rem" }}>.</Badge>Basic Tees</h6>
+                          <p style={{ padding: 0, fontSize: "12px", color: "#858585", paddingLeft: "1.8rem" }}>55%</p>
+                          <h6 style={{ display: "flex" }}><Badge className='text-warning bg-warning' style={{ borderRadius: "50%", marginRight: ".5rem" }}>.</Badge>Custom Short</h6>
+                          <p style={{ padding: 0, fontSize: "12px", color: "#858585", paddingLeft: "1.8rem" }}>31%</p>
+                          <h6 style={{ display: "flex" }}><Badge className='text-danger bg-danger' style={{ borderRadius: "50%", marginRight: ".5rem" }}>.</Badge>Super Hoodies</h6>
+                          <p style={{ padding: 0, fontSize: "12px", color: "#858585", paddingLeft: "1.8rem" }}>14%</p>
+                        </div>
+                      </Col>
+                      <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                        <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" /></Button>
+                        <br />
+                        <p>Add Profile</p>
+                      </Col>
+                    </div>
+                  </Row>
                 </div>
               </div>
             </Col>
