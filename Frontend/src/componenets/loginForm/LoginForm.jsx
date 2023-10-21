@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -22,10 +22,6 @@ function LoginForm() {
     return signInWithPopup(auth, provider)
   }
 
-  useEffect(() => {
-    localStorage.setItem("user", userID);
-  },[userID])
-
   const handleSignIn = (data) => {
 
     firebase.firestore().collection("users").where("email", "==", data.user.email).get()
@@ -35,7 +31,8 @@ function LoginForm() {
             name: data.user.displayName,
             email: data.user.email,
             photoUrl: data.user.photoURL
-          }).then(() => {
+          }).then((data) => {
+            localStorage.setItem('user', data.user.email);
             navigate("/home")
           }).catch(() => {
             toast.error("There is an issue with the login");
@@ -44,7 +41,7 @@ function LoginForm() {
           querySnapshot.forEach((doc) => {
             setUser(doc.data());
             setUserID(doc.id)
-            // console.log(doc.id, " => ", doc.data());
+            localStorage.setItem("user", doc.data().email);
           });
           navigate('/home')
         }
@@ -52,11 +49,6 @@ function LoginForm() {
       .catch((error) => {
         toast.error("Error getting documents: ", error);
       });
-
-    // cheking for the user already haing an account or not 
-    if(user === null){
-      
-    }
   };
 
   return (

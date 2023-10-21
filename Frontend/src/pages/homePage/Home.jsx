@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from "../../store/AuthContext"
+import HomeContainer from '../../componenets/home/HomePage';
 
 function Home() {
 
@@ -7,8 +8,8 @@ function Home() {
 
   return (
     <div>
-      hi am home
-      <h1>{user?.name}</h1>
+      {/* <h1>{user?.name}</h1> */}
+      <HomeContainer/>
     </div>
   )
 }

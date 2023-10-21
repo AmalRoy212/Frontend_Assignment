@@ -1,0 +1,27 @@
+.holder {
+  height: 95vh;
+  max-width: 90%;
+  background: linear-gradient(180deg, #4285F4 100%, #286DE0 100%);
+  border-radius: 20px;
+  padding: 1rem;
+  margin: 1rem;
+  /* justify-content: center;
+  align-items: center; */
+  display: flex;
+  flex-direction: column;
+}
+.navButtons{
+  margin: 2px;
+  background: none;
+  border: none;
+  justify-content:center;
+  align-items:center;
+  font-weight: 100;
+}
+.rightSide{
+  height:90vh;
+  width: 60%;
+  margin: 1.5rem;
+  padding: 1rem;
+  background-color: #286DE0;
+}
