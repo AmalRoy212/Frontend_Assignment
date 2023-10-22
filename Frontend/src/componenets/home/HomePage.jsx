@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import '../../pages/loginPage/login.css'
 import './sidebar.css'
 import { useNavigate } from 'react-router-dom';
+import Tiles from './Tiles';
 
 function HomeContainer() {
 
@@ -58,17 +59,26 @@ function HomeContainer() {
     labels,
     datasets: [
       {
-        label: 'Dataset 1',
+        label: 'Guest',
         data: [19, 12, 20, 23],
         backgroundColor: '#98D89E',
+        barPercentage: 0.9, 
+        categoryPercentage: 0.3, 
+        barThickness: 'flex', 
+        borderRadius: 10,
       },
       {
-        label: 'Dataset 2',
+        label: 'Users',
         data: [9, 21, 30, 35],
         backgroundColor: '#EE8484',
+        barPercentage: 0.9, 
+        categoryPercentage: 0.3,
+        barThickness: 'flex', 
+        borderRadius: 10,
       },
     ],
   };
+
   const dataTwo = {
     datasets: [
       {
@@ -115,10 +125,6 @@ function HomeContainer() {
                   <Button className='d-flex' style={{ background: "none", border: "none", }}><img src='/buttonImgs/img4.png' style={{ marginRight: ".1rem", width: "30px" }} /></Button>
                   <Button className='d-flex' style={{ background: "none", border: "none", }}><img src='/buttonImgs/img5.png' style={{ marginRight: ".1rem", width: "30px" }} /></Button>
                 </div>
-                {/* <div style={{ display: "flex", justifyContent: "center", alignItems: "start", flexDirection: "column", paddingLeft:"1rem" }}>
-                  <Button style={{ background: "none", border: "none", marginTop: "1rem", fontSize: "12px" }}>Help</Button>
-                  <Button style={{ background: "none", border: "none", fontSize: "12px" }}>Contact us</Button>
-                </div> */}
               </div>
             </Col>
             <Col md={9}>
@@ -137,7 +143,8 @@ function HomeContainer() {
                         <div
                           onMouseLeave={() => setDrop(false)}
                           style={{ position: "absolute", right: "1rem", top: "4rem", width: "100px", height: "100px", borderRadius: "15px", background: "linear-gradient(180deg, #4285F4 100%, #286DE0 100%)" }}>
-                          <Button className='btn-danger' style={{ marginTop: "10px" }}
+                            <p style={{fontSize:"12px", margin:"5px"}}>{user?.name}</p>
+                          <Button style={{ marginTop: "10px", fontSize:"13px" }}
                             onClick={() => {
                               localStorage.removeItem('user');
                               navigate('/')
@@ -150,43 +157,35 @@ function HomeContainer() {
                 </div>
                 <div style={{width:"100%", padding:"1rem"}}>
                   <Row style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                    <Col md={2} sm={4} xs={11} style={{ borderRadius: "10px", height: "100px", backgroundColor: "white", margin: ".5rem", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding:"5px", minWidth:"200px" }}>
-                      <img src="/buttonImgs/img7.png" style={{width:"45px"}} alt="" />
-                      <p style={{fontSize:"12px", margin: 0, marginLeft:"7px"}}>Total Revenues</p>
-                      <h5 style={{ marginLeft: "7px", marginBottom:"1rem" }}>$2,129,430 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+2.5%</Badge></h5>
-
-                    </Col>
-                    <Col md={2} sm={4} xs={11} style={{ borderRadius: "10px", height: "100px", backgroundColor: "white", margin: "1rem", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", minWidth:"200px" }}>
-                      <img src="/buttonImgs/img8.png" style={{width:"45px"}} alt="" />
-                      <p style={{ fontSize: "12px", margin: 0, marginLeft:"7px" }}>Total Transactions</p>
-                      <h5 style={{ marginLeft: "7px" }}>1520 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+1.7%</Badge></h5>
-                    </Col>
-                    <Col md={2} sm={4} xs={11} style={{ borderRadius: "10px", height: "100px", backgroundColor: "white", margin: "1rem", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", minWidth:"200px" }}>
-                      <img src="/buttonImgs/img9.png" style={{width:"45px"}} alt="" />
-                      <p style={{ fontSize: "12px", margin: 0, marginLeft:"7px" }}>Total Revenues</p>
-                      <h5 style={{ marginLeft: "7px" }}>9721 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+1.4%</Badge></h5>
-                    </Col>
-                    <Col md={2} sm={4} xs={11} style={{ borderRadius: "10px", height: "100px", backgroundColor: "white", margin: "1rem", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", minWidth:"200px" }}>
-                      <img src="/buttonImgs/img10.png" style={{width:"40px"}} alt="" />
-                      <p style={{ fontSize: "12px", margin: 0, marginLeft:"7px" }}>Total Revenues</p>
-                      <h5 style={{ marginLeft: "7px" }}>9721 <Badge style={{ fontSize: "10px", color: "white", fontWeight: "100px", marginBottom: "1rem" }} className='bg-success'>+4.2%</Badge></h5>
-                    </Col>
+                    <Tiles image={"/buttonImgs/img7.png"} title={"Total Revenues"} amount={"$2, 129, 430"} growth={2.5}/>
+                    <Tiles image={"/buttonImgs/img8.png"} title={"Total Transactions"} amount={1520} growth={1.7}/>
+                    <Tiles image={"/buttonImgs/img9.png"} title={"Total Likes"} amount={9721} growth={1.4}/>
+                    <Tiles image={"/buttonImgs/img10.png"} title={"Total Users"} amount={9721} growth={4.2}/>
                   </Row>
                   <Row>
                     <Col>
-                      <div style={{ width: "100%", height: "40vh", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", borderRadius:"10px"}}>
+                      <div style={{ width: "100%", height: "40vh", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", borderRadius:"10px", backgroundColor:"white"}}>
                         <div style={{padding:"1rem",width:"100%"}}>
                           <h6 style={{marginLeft:".5rem"}}>Activities</h6>
-                          <p style={{ padding: 0, margin: ".5rem", fontSize: "12px", color: "#858585" }}>October - November 2023</p>
+                          <div style={{display:"flex", justifyContent:"space-between", width:"100%"}}>
+                            <p style={{ padding: 0, margin: ".5rem", fontSize: "12px", color: "#858585" }}>October - November 2023</p>
+                            <span style={{display:"flex"}}>
+                              <p style={{ padding: 0, margin: ".5rem", fontSize: "12px", color: "#858585" }}>October - November 2023</p>
+                              <p style={{ padding: 0, margin: ".5rem", fontSize: "12px", color: "#858585" }}>October - November 2023</p>
+
+                            </span>
+                          </div>
                         </div>
                         <div style={{ width: "100%", height: "25vh", display:"flex", justifyContent:"center"}}>
-                          <Chart chartData={data} />
+                          <div className="chart-container" style={{ width: "100%", paddingLeft:"1rem", paddingRight:"1rem" }}>
+                            <Chart chartData={data} />
+                          </div>
                         </div>
                       </div>
                     </Col>
                   </Row>
                   <Row className='d-none d-md-block'>
-                    <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", padding:"5px" }}>
                       <Col md={6} sm={9} xs={9} style={{ minHeight: "215px", backgroundColor: "white", width: "47%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex" }}>
                         <div style={{ height: "70%", width: "50%" }}>
                           <h6 style={{ padding: 0, margin: ".5rem" }}>Top Products</h6>
@@ -212,7 +211,7 @@ function HomeContainer() {
                               style={{
                                 minHeight: "215px",
                                 backgroundColor: "white",
-                                width: "47%",
+                                width: "50%",
                                 margin: ".5rem",
                                 borderRadius: "10px",
                                 boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
@@ -258,7 +257,7 @@ function HomeContainer() {
                           ))}
                         </>
                       )}
-                      <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "47%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                      <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "50%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                         <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" onClick={() => setPopUp(true)} /></Button>
                         <br />
                         <p>Add Profile</p>
@@ -267,14 +266,13 @@ function HomeContainer() {
                   </Row>
                   <Row className='d-block d-md-none'>
                     <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
-                      <Col md={6} sm={9} xs={9} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex" }}>
+                      <Col md={6} sm={9} xs={9} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", marginTop: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex" }}>
                         <div style={{ height: "70%", width: "50%" }}>
                           <h6 style={{ padding: 0, margin: ".5rem" }}>Top Products</h6>
                           <Doughnut data={dataTwo} />
                         </div>
                         <div style={{ height: "70%", width: "50%" }}>
                           <p style={{ padding: 0, margin: ".5rem", fontSize: "12px", color: "#858585" }}>October - November 2023</p>
-                          {/* <br /> */}
                           <h6 style={{ display: "flex" }}><Badge className='text-success bg-success' style={{ borderRadius: "50%", marginRight: ".5rem" }}>.</Badge>Basic Tees</h6>
                           <p style={{ padding: 0, fontSize: "12px", color: "#858585", paddingLeft: "1.8rem" }}>55%</p>
                           <h6 style={{ display: "flex" }}><Badge className='text-warning bg-warning' style={{ borderRadius: "50%", marginRight: ".5rem" }}>.</Badge>Custom Short</h6>
@@ -286,7 +284,7 @@ function HomeContainer() {
                       {profiles && (
                         <>
                           {profiles.map((element, index) => (
-                            <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                            <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", marginTop: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                               <p>{element?.name}</p>
                               <div
                                 style={{
@@ -326,7 +324,7 @@ function HomeContainer() {
                           ))}
                         </>
                       )}
-                      <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                      <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", marginTop: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                         <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" onClick={() => setPopUp(true)} /></Button>
                         <br />
                         <p>Add Profile</p>

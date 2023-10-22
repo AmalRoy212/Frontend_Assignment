@@ -22,10 +22,43 @@ const data = {
   ],
 };
 
+// const options = {
+//   scales: {
+//     y: {
+//       beginAtZero: true,
+//     },
+//   },
+// };
+
+// const options = {
+//   maintainAspectRatio: false,
+//   scales: {
+//     y: {
+//       beginAtZero: true,
+//     },
+//   },
+// };
 const options = {
+  maintainAspectRatio: false,
   scales: {
     y: {
       beginAtZero: true,
+      grid: {
+        display: true, // Hide grid lines on the y-axis
+      },
+    },
+    x: {
+      grid: {
+        display: false, // Hide grid lines on the x-axis
+      },
+    },
+  },
+  plugins: {
+    filler: {
+      propagate: false, // Disable filling of the area under the line
+    },
+    legend: {
+      display: false,
     },
   },
 };
