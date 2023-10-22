@@ -1,36 +1,56 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Container, Row, Col } from 'react-bootstrap';
-import { FaSistrix } from 'react-icons/fa';
+import ReactLoading from 'react-loading';
 import Badge from 'react-bootstrap/Badge';
-import { Doughnut } from 'react-chartjs-2';
-import { AuthContext } from "../../store/AuthContext";
-import '../../pages/loginPage/login.css'
-import './sidebar.css'
-import { FirebaseContext } from '../../store/Context';
 import Chart from '../chart/Chart';
 import PopUp from '../PopUpWindow/PopUp';
-import { PopUpContext } from '../../store/AppContext';
+import { Button, Container, Row, Col } from 'react-bootstrap';
+import { FaSistrix } from 'react-icons/fa';
+import { Doughnut } from 'react-chartjs-2';
+import { AuthContext } from "../../store/AuthContext";
+import { FirebaseContext } from '../../store/Context';
+import { toast } from 'react-toastify';
+import '../../pages/loginPage/login.css'
+import './sidebar.css'
+import { useNavigate } from 'react-router-dom';
 
 function HomeContainer() {
 
   const { user, setUser } = useContext(AuthContext);
   const { firebase } = useContext(FirebaseContext);
-  // const { popUP, setPopUp } = useContext(PopUpContext)
 
+  const [profiles, setProfiles] = useState([]);
   const [popUp, setPopUp] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [drop, setDrop] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
+    setLoading(true)
     firebase.firestore().collection("users").where("email", "==", localStorage.getItem('user')).get()
       .then((querySnapshot) => {
         querySnapshot.forEach(element => {
           setUser(element.data());
+          setLoading(false)
         });
       })
       .catch((error) => {
         toast.error("Error getting documents: ", error);
+        setLoading(false)
       });
-  }, [user])
+  }, [])
 
+  useEffect(() => {
+    firebase.firestore().collection('profiles').get()
+      .then((querySnapshot) => {
+        const profilesData = querySnapshot.docs.map(doc => doc.data());
+        setProfiles(profilesData);
+      })
+      .catch((error) => {
+        toast.error("Error getting documents: ", error);
+      });
+
+  },[popUp])
 
   //dummy data
   const labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
@@ -55,9 +75,9 @@ function HomeContainer() {
         label: 'Dataset 1',
         data: [ 12, 40, 23],
         backgroundColor: [
-          '#98D89E', // Color for the first segment
-          '#EE8484', // Color for the second segment
-          '#FFFF99', // Color for the third segment
+          '#98D89E',
+          '#EE8484',
+          '#FFFF99',
         ],
       },
     ],
@@ -103,7 +123,7 @@ function HomeContainer() {
             </Col>
             <Col md={9}>
               <div style={{width:"100%", height:"95vh", marginTop:"1rem"}}>
-                <div style={{width:"97%", height:"50px", paddingTop:"1rem",justifyContent:"space-between", display:"flex"}}>
+                <div style={{ width: "97%", height: "50px", paddingTop: "1rem",justifyContent:"space-between", display:"flex"}}>
                   <h4 style={{fontSize:"18px"}} className='text-dark'>Dashboard</h4>
                   <div style={{display:"flex", justifyContent:"center", alignItems:"center", height:"50%"}}>
                     <div style={{ border: "none", borderRadius: "10px", backgroundColor:"white", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"5px" }}>
@@ -111,7 +131,21 @@ function HomeContainer() {
                      <FaSistrix/>
                     </div>
                     <Button style={{ border: "none", background: "none" }}><img style={{width:"25px"}} src='/buttonImgs/img6.png' /></Button>
-                    {user && <img style={{width:"30px", height:"30px", objectFit:"cover", borderRadius:"50%"}} src={user?.photoUrl} alt="" />}
+                    {user && <Button className='p-0 m-0' style={{background:"none", border:"none"}} onClick={()=>setDrop(true)}>
+                      <img style={{ width: "30px", height: "30px", objectFit: "cover", borderRadius: "50%" }} src={user?.photoUrl} alt="" />
+                      {drop && <>
+                        <div
+                          onMouseLeave={() => setDrop(false)}
+                          style={{ position: "absolute", right: "1rem", top: "4rem", width: "100px", height: "100px", borderRadius: "15px", background: "linear-gradient(180deg, #4285F4 100%, #286DE0 100%)" }}>
+                          <Button className='btn-danger' style={{ marginTop: "10px" }}
+                            onClick={() => {
+                              localStorage.removeItem('user');
+                              navigate('/')
+                            }}
+                          >Log Out</Button>
+                        </div>
+                      </>}
+                    </Button> }
                   </div>
                 </div>
                 <div style={{width:"100%", padding:"1rem"}}>
@@ -169,6 +203,61 @@ function HomeContainer() {
                           <p style={{ padding: 0, fontSize: "12px", color: "#858585", paddingLeft: "1.8rem" }}>14%</p>
                         </div>
                       </Col>
+                      {profiles && (
+                        <>
+                          {profiles.map((element, index) => (
+                            <Col
+                              key={index}
+                              md={6}
+                              style={{
+                                minHeight: "215px",
+                                backgroundColor: "white",
+                                width: "47%",
+                                margin: ".5rem",
+                                borderRadius: "10px",
+                                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                                padding: "1.5rem"
+                              }}
+                            >
+                              <p>{element?.name}</p>
+                              <div
+                                style={{
+                                  width: "100%",
+                                  display: "flex",
+                                  padding: ".5rem",
+                                  justifyContent: "space-between"
+                                }}
+                              >
+                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                  <img src="/buttonImgs/img12.png" style={{ width: "30px" }} />
+                                  <u>{element?.phone}</u>
+                                </p>
+                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                  <img src="/buttonImgs/img13.png" style={{ width: "30px" }} />
+                                  <u>{element?.email}</u>
+                                </p>
+                              </div>
+                              <div
+                                style={{
+                                  width: "100%",
+                                  display: "flex",
+                                  padding: ".5rem",
+                                  justifyContent: "space-between"
+                                }}
+                              >
+                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                  <img src="/buttonImgs/img14.png" style={{ width: "30px" }} />
+                                  <u>{element?.insta}</u>
+                                </p>
+                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                  <img src="/buttonImgs/img15.png" style={{ width: "30px" }} />
+                                  <u>{element?.youtube}</u>
+                                </p>
+                              </div>
+                            </Col>
+                          ))}
+                        </>
+                      )}
                       <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "47%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                         <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" onClick={() => setPopUp(true)} /></Button>
                         <br />
@@ -194,6 +283,49 @@ function HomeContainer() {
                           <p style={{ padding: 0, fontSize: "12px", color: "#858585", paddingLeft: "1.8rem" }}>14%</p>
                         </div>
                       </Col>
+                      {profiles && (
+                        <>
+                          {profiles.map((element, index) => (
+                            <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                              <p>{element?.name}</p>
+                              <div
+                                style={{
+                                  width: "100%",
+                                  display: "flex",
+                                  padding: ".5rem",
+                                  justifyContent: "space-between"
+                                }}
+                              >
+                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                  <img src="/buttonImgs/img12.png" style={{ width: "30px" }} />
+                                  <u>{element?.phone}</u>
+                                </p>
+                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                  <img src="/buttonImgs/img13.png" style={{ width: "30px" }} />
+                                  <u>{element?.email}</u>
+                                </p>
+                              </div>
+                              <div
+                                style={{
+                                  width: "100%",
+                                  display: "flex",
+                                  padding: ".5rem",
+                                  justifyContent: "space-between"
+                                }}
+                              >
+                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                  <img src="/buttonImgs/img14.png" style={{ width: "30px" }} />
+                                  <u>{element?.insta}</u>
+                                </p>
+                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                  <img src="/buttonImgs/img15.png" style={{ width: "30px" }} />
+                                  <u>{element?.youtube}</u>
+                                </p>
+                              </div>
+                            </Col>
+                          ))}
+                        </>
+                      )}
                       <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
                         <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" onClick={() => setPopUp(true)} /></Button>
                         <br />
@@ -205,7 +337,14 @@ function HomeContainer() {
               </div>
             </Col>
           </Row>
-          {popUp && <PopUp setPopUp={setPopUp} />}
+          {popUp && <PopUp setPopUp={setPopUp} setLoading={setLoading} />}
+          {loading && <>
+            <div style={{display:"flex", justifyContent:"center", alignItems:"center", position:"fixed", top:0, left:0, width:"100%", height:"100vh", zIndex:'11'}}>
+              <div style={{ width: "100px", height: "100px", display: "flex", justifyContent: "center", alignItems: "center", background:"linear-gradient(180deg, #4285F4 100%, #286DE0 100%)", borderRadius:"15px", zIndex:"11"}}>
+                <ReactLoading height={50} width={50} />
+              </div>
+            </div>
+          </>}
         </Container>
       </div>
     </>

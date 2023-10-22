@@ -13,9 +13,8 @@ export const router = createBrowserRouter(
     <>
       <Route path='/' element={<App />}>
         <Route index={true} path='/' element={<LoginPage />} />
-        <Route index={true} path='/home' element={<Home />} />
         <Route path="" element={<PrivateRoutes />}>
-
+          <Route index={true} path='/home' element={<Home />} />
         </Route>
       </Route>
     </>

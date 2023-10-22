@@ -1,9 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { FirebaseContext } from '../../store/Context';
 
-function PopUp({setPopUp}) {
+function PopUp({setPopUp, setLoading}) {
+
+  const { firebase } = useContext(FirebaseContext);
+
   const [basicColor, setBasicColour] = useState("#4285F4");
   const [socialColor, setSocialColor] = useState("grey");
   const [currentForm, setCurrentForm] = useState('basic');
@@ -26,22 +30,62 @@ function PopUp({setPopUp}) {
     setCurrentForm('social')
   }
 
-  const handleNext = (name,email,phone) => {
-    if(name.length <= 2){
+  const validateBasicForm = (name,email,phone) => {
+    if (name.length <= 2) {
       toast.warning("Please enter a valid name");
-      return
+      return false
     }
-    if(email.length <= 2){
+    if (email.length <= 2) {
       toast.warning("Please enter a valid email");
-      return
+      return false
     }
-    if(phone.length < 10){
+    if (phone.length < 10) {
       toast.warning("Please enter a valid phone");
-      return
+      return false
     }
-    console.log(name,email,phone,insta,youtube)
+    return true
+  }
+
+  const validateSocialForm = (insta,youtube) => {
+    if (insta.length <= 2) {
+      toast.warning("Please enter a valid name");
+      return false
+    }
+    if (youtube.length <= 2) {
+      toast.warning("Please enter a valid email");
+      return false
+    }
+
+    return true
+  }
+
+  const handleNext = () => {
+    validateBasicForm(name,email,phone);
     moveToSocial();
   }
+
+  const submitHandler = () => {
+    setLoading(true)
+    if (!validateBasicForm(name, email, phone) && !validateSocialForm(insta, youtube)){ 
+      setLoading(false)
+      return
+    }
+    firebase.firestore().collection("profiles").add({
+      name,
+      email,
+      phone,
+      insta,
+      youtube
+    }).then((data) => {
+      toast.success("Profile added successfully")
+      setPopUp(false);
+      setLoading(false);
+    }).catch(() => {
+      setLoading(false);
+      toast.error("There is an issue with adding profile");
+    })
+  }
+
   return (
     <>
       <div style={{
@@ -131,7 +175,7 @@ function PopUp({setPopUp}) {
               {currentForm === "basic" ? (
                 <Button style={{ fontSize: "11px", marginLeft: "5px" }} className=''
                   onClick={() => {
-                    handleNext(name,email,phone)
+                    handleNext()
                   }}
                 >Next</Button>
               ):(
@@ -139,7 +183,9 @@ function PopUp({setPopUp}) {
                   <Button style={{ fontSize: "11px", border: "2px solid #EBEBEB" }} className='bg-white text-dark'
                       onClick={backToBasic}
                   >Back</Button>
-                  <Button style={{ fontSize: "11px", marginLeft: "5px" }} className=''>Done</Button>
+                  <Button style={{ fontSize: "11px", marginLeft: "5px" }} className=''
+                  onClick={submitHandler}
+                  >Done</Button>
                 </>
               )}
             </div>

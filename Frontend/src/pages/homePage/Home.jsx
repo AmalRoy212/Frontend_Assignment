@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from "../../store/AuthContext"
 import HomeContainer from '../../componenets/home/HomePage';
-import PopUpContext from '../../store/AppContext';
 
 function Home() {
 
@@ -9,9 +8,7 @@ function Home() {
 
   return (
     <div>
-      <PopUpContext>
-        <HomeContainer/>
-      </PopUpContext>
+      <HomeContainer/>
     </div>
   )
 }
