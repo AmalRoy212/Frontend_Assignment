@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import ReactLoading from 'react-loading';
 import { Container, Button } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -12,12 +13,14 @@ import "./loginForm.css";
 function LoginForm() {
 
   const [userID, setUserID] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { firebase } = useContext(FirebaseContext);
   const { user, setUser } = useContext(AuthContext)
 
   const handleGoogle = async (e) => {
+    setLoading(true)
     const provider = await new GoogleAuthProvider();
     return signInWithPopup(auth, provider)
   }
@@ -44,10 +47,12 @@ function LoginForm() {
           });
           navigate('/home')
         }
+        setLoading(false)
       })
       .catch((error) => {
         console.error("Error handling sign in:", error);
         toast.error("Error handling sign in: ", error.message);
+        setLoading(false)
       });
 
   };
@@ -90,6 +95,13 @@ function LoginForm() {
         <h6 className='textHolder' style={{ fontSize: "12px" }}>Dont have an account ? <a style={{ textDecoration: "none" }} href="">Register here</a></h6>
         {/* </div> */}
       </Container>
+      {loading && <>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "fixed", top: 0, left: 0, width: "100%", height: "100vh", zIndex: '11' }}>
+          <div style={{ width: "100px", height: "100px", display: "flex", justifyContent: "center", alignItems: "center", background: "linear-gradient(180deg, #4285F4 100%, #286DE0 100%)", borderRadius: "15px", zIndex: "11" }}>
+            <ReactLoading height={50} width={50} />
+          </div>
+        </div>
+      </>}
     </div>
   )
 }
