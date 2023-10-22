@@ -39,13 +39,15 @@ function LoginPage() {
             <LoginForm />
           </div>
           <div className="d-block d-md-none">
-            <LoginForm />
-            <Col xs={12} md={4} className='secondFoot'>
-              <Button><FaGithub size={17} /></Button>
-              <Button><FaTwitterSquare size={17} /></Button>
-              <Button><FaLinkedin size={17} /></Button>
-              <Button><FaDiscord size={17} /></Button>
-            </Col>
+            <div style={{display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", width:"100%"}}>
+              <LoginForm />
+              <Col xs={12} md={4} className='secondFoot'>
+                <Button><FaGithub size={17} /></Button>
+                <Button><FaTwitterSquare size={17} /></Button>
+                <Button><FaLinkedin size={17} /></Button>
+                <Button><FaDiscord size={17} /></Button>
+              </Col>
+            </div>
           </div>
         </div>
       </div>
