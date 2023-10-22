@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { FaSistrix } from 'react-icons/fa';
 import Badge from 'react-bootstrap/Badge';
@@ -8,11 +8,16 @@ import '../../pages/loginPage/login.css'
 import './sidebar.css'
 import { FirebaseContext } from '../../store/Context';
 import Chart from '../chart/Chart';
+import PopUp from '../PopUpWindow/PopUp';
+import { PopUpContext } from '../../store/AppContext';
 
 function HomeContainer() {
 
   const { user, setUser } = useContext(AuthContext);
   const { firebase } = useContext(FirebaseContext);
+  // const { popUP, setPopUp } = useContext(PopUpContext)
+
+  const [popUp, setPopUp] = useState(false);
 
   useEffect(() => {
     firebase.firestore().collection("users").where("email", "==", localStorage.getItem('user')).get()
@@ -165,7 +170,7 @@ function HomeContainer() {
                         </div>
                       </Col>
                       <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "47%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-                        <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" /></Button>
+                        <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" onClick={() => setPopUp(true)} /></Button>
                         <br />
                         <p>Add Profile</p>
                       </Col>
@@ -190,7 +195,7 @@ function HomeContainer() {
                         </div>
                       </Col>
                       <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", margin: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-                        <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" /></Button>
+                        <Button style={{ background: "none", border: "none" }}><img style={{ width: "120px", height: "120px" }} src="/buttonImgs/img11.png" alt="" onClick={() => setPopUp(true)} /></Button>
                         <br />
                         <p>Add Profile</p>
                       </Col>
@@ -200,6 +205,7 @@ function HomeContainer() {
               </div>
             </Col>
           </Row>
+          {popUp && <PopUp setPopUp={setPopUp} />}
         </Container>
       </div>
     </>

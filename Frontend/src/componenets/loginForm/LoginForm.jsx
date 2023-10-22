@@ -23,7 +23,6 @@ function LoginForm() {
   }
 
   const handleSignIn = (data) => {
-
     firebase.firestore().collection("users").where("email", "==", data.user.email).get()
       .then((querySnapshot) => {
         if (querySnapshot.docs.length === 0){
@@ -47,8 +46,10 @@ function LoginForm() {
         }
       })
       .catch((error) => {
-        toast.error("Error getting documents: ", error);
+        console.error("Error handling sign in:", error);
+        toast.error("Error handling sign in: ", error.message);
       });
+
   };
 
   return (
