@@ -50,8 +50,8 @@ function LoginForm() {
         setLoading(false)
       })
       .catch((error) => {
-        console.error("Error handling sign in:", error);
-        toast.error("Error handling sign in: ", error.message);
+        // console.error("Error handling sign in:", error);
+        toast.error("We are working on this to rectify the issue, Kindly try again later");
         setLoading(false)
       });
 

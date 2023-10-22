@@ -9,53 +9,37 @@ const data = {
       label: 'Dataset 1',
       data: [19, 12, 20, 23],
       backgroundColor: '#98D89E',
-      barPercentage: 0.8, // Adjust this value for border radius effect
-      categoryPercentage: 1.0, // Adjust this value for border radius effect
+      barPercentage: 0.8, 
+      categoryPercentage: 1.0, 
     },
     {
       label: 'Dataset 2',
       data: [9, 21, 30, 35],
       backgroundColor: '#EE8484',
-      barPercentage: 0.8, // Adjust this value for border radius effect
-      categoryPercentage: 1.0, // Adjust this value for border radius effect
+      barPercentage: 0.8, 
+      categoryPercentage: 1.0, 
     },
   ],
 };
 
-// const options = {
-//   scales: {
-//     y: {
-//       beginAtZero: true,
-//     },
-//   },
-// };
-
-// const options = {
-//   maintainAspectRatio: false,
-//   scales: {
-//     y: {
-//       beginAtZero: true,
-//     },
-//   },
-// };
 const options = {
   maintainAspectRatio: false,
   scales: {
     y: {
       beginAtZero: true,
       grid: {
-        display: true, // Hide grid lines on the y-axis
+        display: true,
       },
     },
     x: {
       grid: {
-        display: false, // Hide grid lines on the x-axis
+        display: false,
       },
     },
   },
   plugins: {
     filler: {
-      propagate: false, // Disable filling of the area under the line
+      propagate: false, 
     },
     legend: {
       display: false,
