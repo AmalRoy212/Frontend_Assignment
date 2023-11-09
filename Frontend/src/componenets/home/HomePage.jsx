@@ -284,43 +284,46 @@ function HomeContainer() {
                       {profiles && (
                         <>
                           {profiles.map((element, index) => (
-                            <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", marginTop: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-                              <p>{element?.name}</p>
-                              <div
-                                style={{
-                                  width: "100%",
-                                  display: "flex",
-                                  padding: ".5rem",
-                                  justifyContent: "space-between"
-                                }}
-                              >
-                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
-                                  <img src="/buttonImgs/img12.png" style={{ width: "30px" }} />
-                                  <u>{element?.phone}</u>
-                                </p>
-                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
-                                  <img src="/buttonImgs/img13.png" style={{ width: "30px" }} />
-                                  <u>{element?.email}</u>
-                                </p>
-                              </div>
-                              <div
-                                style={{
-                                  width: "100%",
-                                  display: "flex",
-                                  padding: ".5rem",
-                                  justifyContent: "space-between"
-                                }}
-                              >
-                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
-                                  <img src="/buttonImgs/img14.png" style={{ width: "30px" }} />
-                                  <u>{element?.insta}</u>
-                                </p>
-                                <p style={{ fontSize: "15px", fontWeight: "initial" }}>
-                                  <img src="/buttonImgs/img15.png" style={{ width: "30px" }} />
-                                  <u>{element?.youtube}</u>
-                                </p>
-                              </div>
-                            </Col>
+                            <>
+                              <Col md={6} style={{ minHeight: "215px", backgroundColor: "white", width: "100%", marginTop: ".5rem", borderRadius: "10px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", padding: "5px", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                                <p>{element?.name}</p>
+                                <div
+                                  style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    padding: ".5rem",
+                                    justifyContent: "space-between"
+                                  }}
+                                >
+                                  <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                    <img src="/buttonImgs/img12.png" style={{ width: "30px" }} />
+                                    <u>{element?.phone}</u>
+                                  </p>
+                                  <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                    <img src="/buttonImgs/img13.png" style={{ width: "30px" }} />
+                                    <u>{element?.email}</u>
+                                  </p>
+                                </div>
+                                <div
+                                  style={{
+                                    width: "100%",
+                                    display: "flex",
+                                    padding: ".5rem",
+                                    justifyContent: "space-between"
+                                  }}
+                                >
+                                  <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                    <img src="/buttonImgs/img14.png" style={{ width: "30px" }} />
+                                    <u>{element?.insta}</u>
+                                  </p>
+                                  <p style={{ fontSize: "15px", fontWeight: "initial" }}>
+                                    <img src="/buttonImgs/img15.png" style={{ width: "30px" }} />
+                                    <u>{element?.youtube}</u>
+                                  </p>
+                                </div>
+                              </Col>
+                              {index % 2 === 1 && <br></br>}
+                            </>
                           ))}
                         </>
                       )}
